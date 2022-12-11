@@ -58,6 +58,9 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true)
     private Account account;
 
+    @OneToMany(mappedBy = "student", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<PeerReview> peerReviews = new HashSet<>();
+
     public Student( String studentnumber,
              String lastname,
             String firstname,

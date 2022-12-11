@@ -31,6 +31,12 @@ public class CourseQuestion {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     private Course course;
+
+    public CourseQuestion( String title, Course course) {
+        this.title = title;
+        this.course = course;
+    }
+    
     
   
 }

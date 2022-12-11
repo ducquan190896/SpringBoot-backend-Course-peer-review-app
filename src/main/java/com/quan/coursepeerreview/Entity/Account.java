@@ -3,6 +3,9 @@ package com.quan.coursepeerreview.Entity;
 
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -47,11 +50,22 @@ public class Account {
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
+    
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<PeerReview> peerReviews = new HashSet<>();
+
     public Account( String username,
             String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
+    }
+
+    public Account( String username, String password, Role role, Student student) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.student = student;
     }
     
     

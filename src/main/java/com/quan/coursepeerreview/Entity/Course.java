@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -63,7 +64,18 @@ public class Course {
     )
     private Set<Student> students = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "course", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<PeerReview> peerReviews = new HashSet<>();
 
+    public Course( String name, String coursecode, CourseStatus status, LocalDateTime createdby) {
+        this.name = name;
+        this.coursecode = coursecode;
+        this.status = status;
+        this.createdby = createdby;
+    }
+
+    
 
     
 }
