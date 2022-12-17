@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AccountRequest {
-    private String username;
-    private String password;
-    private String confirmedPassword;
+public class ReviewRequest {
+    private Long studentId;
+    private Long courseId;
+    private Long accountId;
 }

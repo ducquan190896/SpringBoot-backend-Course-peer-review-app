@@ -28,6 +28,7 @@ public class CourseQuestion {
     @Column(name = "title", nullable = false)
     private String title;
     
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     private Course course;

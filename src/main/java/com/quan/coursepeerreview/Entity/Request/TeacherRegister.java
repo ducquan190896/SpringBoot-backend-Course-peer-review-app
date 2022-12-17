@@ -2,6 +2,15 @@ package com.quan.coursepeerreview.Entity.Request;
 
 import com.quan.coursepeerreview.Entity.Role;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TeacherRegister {
     private String studentnumber;
     private String lastname;

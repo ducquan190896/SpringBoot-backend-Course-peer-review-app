@@ -44,14 +44,14 @@ public class Course {
     private String coursecode;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "status cannot be null")
     @Column(name = "status", nullable = false)
     private CourseStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "createdby", nullable = false)
+    @Column(name = "createdby")
     private LocalDateTime createdby;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "course", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseQuestion> courseQuestions = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class Course {
     private Set<Student> students = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "course", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", orphanRemoval = true, fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private Set<PeerReview> peerReviews = new HashSet<>();
 
     public Course( String name, String coursecode, CourseStatus status, LocalDateTime createdby) {
@@ -75,7 +75,13 @@ public class Course {
         this.createdby = createdby;
     }
 
-    
+    public Course( String name, String coursecode, CourseStatus status) {
+        this.name = name;
+        this.coursecode = coursecode;
+        this.status = status;
+        
+    }
+
 
     
 }

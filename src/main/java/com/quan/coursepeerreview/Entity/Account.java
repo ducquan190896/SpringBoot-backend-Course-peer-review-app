@@ -45,13 +45,13 @@ public class Account {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
     
-    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
     private Set<PeerReview> peerReviews = new HashSet<>();
 
     public Account( String username,
@@ -66,6 +66,11 @@ public class Account {
         this.password = password;
         this.role = role;
         this.student = student;
+    }
+
+    @Override
+    public String toString() {
+        return "Account [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
     }
     
     

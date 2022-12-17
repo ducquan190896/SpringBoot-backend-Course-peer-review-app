@@ -5,6 +5,8 @@ package com.quan.coursepeerreview.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.query.sqm.CastType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -47,10 +49,8 @@ public class Student {
     @Column(name = "faculty", nullable = false)
     private String faculty;
 
-    
-    @Column(name = "group")
-    private String group;
-
+   
+    @JsonIgnore
     @ManyToMany(mappedBy = "students", cascade = CascadeType.MERGE)
     private Set<Course> courses = new HashSet<>();
 
@@ -58,30 +58,26 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true)
     private Account account;
 
-    @OneToMany(mappedBy = "student", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", orphanRemoval = true, fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private Set<PeerReview> peerReviews = new HashSet<>();
 
     public Student( String studentnumber,
              String lastname,
             String firstname,
-             String faculty, String group) {
+             String faculty) {
         this.studentnumber = studentnumber;
         this.lastname = lastname;
         this.firstname = firstname;
         this.faculty = faculty;
-        this.group = group;
+      
     }
-
-    public Student( String studentnumber,
-    String lastname,
-   String firstname,
-    String faculty) {
-this.studentnumber = studentnumber;
+    public Student(  String lastname,String firstname, String faculty) {
 this.lastname = lastname;
 this.firstname = firstname;
 this.faculty = faculty;
 
 }
 
+ 
 
 }

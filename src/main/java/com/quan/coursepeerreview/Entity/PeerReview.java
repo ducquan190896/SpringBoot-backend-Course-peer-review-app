@@ -1,6 +1,7 @@
 package com.quan.coursepeerreview.Entity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.catalina.User;
 
@@ -37,20 +38,23 @@ public class PeerReview {
     @Column(name = "grade", updatable = false)
     private double grade;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     private Course course;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
 
-    @JsonIgnore
+    // @JsonIgnore
     @OneToMany(mappedBy = "peerReview", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
 
@@ -59,7 +63,17 @@ public class PeerReview {
         this.student = student;
         this.course = course;
         this.account = account;
+        this.grade = countGrade();
     }
 
+    public double countGrade() {
+        double grad = 0;
+        if(this.questions.size() > 0) {
+            grad = this.questions.stream().map(que -> que.getGrade()).mapToDouble(gra -> Double.valueOf(gra)).reduce(0, (a, b) -> a + b);
+        } else {
+            grad = 0;
+        }
+        return grad;
+    }
     
 }
