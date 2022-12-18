@@ -1,9 +1,17 @@
 package com.quan.coursepeerreview.Service.Implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +30,23 @@ import com.quan.coursepeerreview.Service.AccountService;
 
 
 @Service
-public class AccountServiceIml implements AccountService{
+public class AccountServiceIml implements AccountService, UserDetailsService{
     @Autowired
     AccountRepos accountRepos;
 
+   
+
     @Autowired
     StudentRepos studentRepos;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Account> entity = accountRepos.findAccountByUsername(username);
+        Account account = isCheck(entity, 404L);
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(account.getRole().getName()));
+        return new User(account.getUsername(), account.getPassword(), list);
+    }
     
 
     @Override
@@ -88,7 +107,9 @@ public class AccountServiceIml implements AccountService{
 
     @Override
     public Account updateAccount( ChangePassword changePassword) {
-        Optional<Account> entity = accountRepos.findAccountByUsername(changePassword.getUsername());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        Optional<Account> entity = accountRepos.findAccountByUsername(authentication.getName());
         Account account = isCheck(entity, 404L );
         System.out.println(account.getPassword());
         System.out.println(new BCryptPasswordEncoder().encode(changePassword.getCurrentPassword()).toString());
